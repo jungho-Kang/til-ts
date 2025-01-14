@@ -4,7 +4,8 @@
   "description": "- 변수, 매개변수, 함수리턴 값에 `데이터의 종류를 지정`하는 도구\r - 최종 결과물은 js 파일이 만들어 집니다\r - 버그를 많이 줄여준다\r - 알아야 하는 문법이 많다",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc"
   },
   "author": "",
   "license": "ISC",

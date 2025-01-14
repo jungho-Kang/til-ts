@@ -1,2 +1,1 @@
-console.log("Hello, World!");
-const a: number = 10;
+const age: number = 200;

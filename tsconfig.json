@@ -1,13 +1,23 @@
 {
+  // 컴파일 할 파일 범위
   "include": ["src/**/*"],
+  // 컴파일 옵션
   "compilerOptions": {
+    // 컴파일 js 버전
     "target": "ESNext",
+    // 라이브러리 체크 건너뛰기
     "skipLibCheck": true,
+    // 모듈 버전(import, export 문법)
     "module": "ESNext",
+    // 컴파일 js 파일 결과물 위치
     "outDir": "./dist",
+    // 타입스크립트는 반드시 엄격한 모드
     "strict": true,
+    // 모듈 검색 강제 여부
     "moduleDetection": "force",
+    // js 파일 허용
     "allowJs": true,
+    // jsx 문법 허용
     "jsx": "react-jsx"
   }
 }

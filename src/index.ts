@@ -1,16 +1,11 @@
-// 리터럴은 실제 값을 말한다
-// 아래는 "hello"라는 리터럴이다
-const constStr: "hello" = "hello";
+type Person = { name: string };
+type Employ = { company: string };
+type Sample = Person & Employ;
 
-// const 상수로 만들면 값은 "hello"로 고정이 됩니다
-// 그러나 어찌되었든 "hello"는 string이다
-// "hello" 리터럴은 문자열에 포함된다 (업캐스팅 된다)
-let str: string = constStr;
+// 속성이 한 개만 누락되어도 오류다
+const whoA: Sample = { name: "hong" }; // 오류
+const whoB: Sample = { company: "green" }; // 오류
 
-// 리터럴로 표현하면
-let num: 100 = 100;
-// 100 리터럴은 숫자형에 포함된다 (업캐스팅 된다)
-let num2: number = num;
-
-// false 리터럴은 Boolean에 포함된다 (업캐스팅 된다)
-const isLive: boolean = false;
+// Sample 타입은 Person과 Employ를 모두의 서브타입이므로
+// 두 타입의 데이터가 모두 있어야 한다
+const whoC: Sample = { company: "green", name: "hong" }; // 정상

@@ -1,35 +1,11 @@
-// 약속을 지켜라
-interface CarInterface {
-  name: string;
-  brand: string;
-  price: number;
-  stop(): void;
-  move(): void;
+// 함수 리턴타입에서 리턴 종류를 모르면
+// any 또는 void를 리턴한다
+// 만약 원하는 것이 있다면 정확히 작성해야 한다
+function showValue<T>(value: T): T {
+  return value;
 }
 
-interface ElectricInterface {
-  battery: number;
-  isBattery: boolean;
-}
-
-// 인터페이스를 구현하였음
-// 인터페이스는 무조건 public(private, protected 없음)
-class ElectricCar implements CarInterface, ElectricInterface {
-  constructor(
-    public name: string,
-    public brand: string,
-    public price: number,
-    public battery: number,
-    public isBattery: boolean
-  ) {}
-  stop() {
-    console.log("멈춰라");
-  }
-  move() {
-    console.log("움직여라");
-  }
-}
-
-let 자동차 = new ElectricCar("캐스퍼", "현대", 1000, 100, true);
-자동차.stop();
-자동차.move();
+let test = showValue(10);
+let test2 = showValue("안녕");
+let test3 = showValue(true);
+let test4 = showValue([1, 2, 3]);

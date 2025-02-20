@@ -1570,3 +1570,698 @@ type UserApiState8 = {
   [key in Exclude<keyof ApiState, "getPost">]?: ApiState[key];
 };
 ```
+
+# class
+
+- 우리가 정의하기보다는 라이브러리들이 정의되어진 경우가 많다
+
+```ts
+/**
+ * 클래스
+ */
+// 정의하는 법
+class SampleClass {}
+
+// 기본형
+class Game {
+  // 속성
+  name: string;
+  country: string;
+  count: number;
+  // new Game(...)하면 실행되는 인스턴스 생성자 함수
+  constructor(name: string, country: string, count: number) {
+    this.name = name;
+    this.country = country;
+    this.count = count;
+  }
+  // 메소드
+  hi(): void {
+    console.log(this.name, this.country, this.count);
+  }
+}
+```
+
+```ts
+// 읽기 전용 속성
+class Idol {
+  // 속성 (읽기 전용)
+  readonly name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+
+const iu = new Idol("아이유", 30);
+// iu.name = "iu"; // 오류 (읽기 전용)
+iu.age = 10;
+```
+
+```ts
+// 속성 초기화 하는 방법
+class Person {
+  // 필수로 값을 할당해야 합니다 (constructor 함수)
+  name: string;
+  // 초기값 세팅 완료
+  age: number = 20;
+  // optional 선언
+  pet?: string;
+  // undefined가 될 수도 있어서 필수값 아님
+  petAge: number | undefined;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+```
+
+```ts
+// 초기값은 내가 보증할게
+class Go {
+  // 반드시 있다는 표현 `!`
+  stack!: string[];
+
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    this.stack = [];
+  }
+}
+```
+
+```ts
+// 클래스는 데이터 타입으로 인정
+// 클래스는 값의 타입으로 인정
+class Dog {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+  bark() {}
+}
+
+// let dog: Dog
+let dog = new Dog("멍멍이");
+// dog = 123; // Type Error
+// dog = "댕이"; // Type Error
+dog = {
+  name: "야옹이",
+  bark: () => {
+    console.log("하이");
+  },
+};
+```
+
+```ts
+// interface 구현 (implements)
+// 약속을 지켜서 모든 내용을 채워라
+interface Animal {
+  name: string;
+  age: number;
+  jump(): string;
+}
+class Dog2 implements Animal {
+  // 구현을 해야하는 항목
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+  jump(): string {
+    return this.name;
+  }
+  // 클래스 만의 기능
+  go(): void {}
+}
+
+interface Pet {
+  legs: number;
+  bark(): void;
+}
+
+class Cat implements Animal, Pet {
+  // Animal 구현
+  name: string;
+  age: number;
+  // Pet 구현
+  legs: number;
+  constructor(name: string, age: number, legs: number) {
+    this.name = name;
+    this.age = age;
+    this.legs = legs;
+  }
+  // Animal 구현
+  jump(): string {
+    return this.name;
+  }
+  // Pet 구현
+  bark(): void {}
+}
+
+// type으로 Intersection
+type AnimalAndPet = Animal & Pet;
+
+class Cat2 implements AnimalAndPet {
+  // Animal 구현
+  name: string;
+  age: number;
+  // Pet 구현
+  legs: number;
+  constructor(name: string, age: number, legs: number) {
+    this.name = name;
+    this.age = age;
+    this.legs = legs;
+  }
+  // Animal 구현
+  jump(): string {
+    return this.name;
+  }
+  // Pet 구현
+  bark(): void {}
+}
+```
+
+```ts
+/**
+ * 클래스
+ */
+
+// 아래 내용은 상당히 고급 내용인데 활용이 많이 됩니다
+// constructor가 있는 인터페이스 정의
+// 특히 제네릭에서 많이 활용
+class IU {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+interface IConstructor {
+  new (name: string, age: number): IU;
+}
+
+function createIU(constructor: IConstructor, name: string, age: number) {
+  return new constructor(name, age);
+}
+let iu = createIU(IU, "아이유", 30);
+```
+
+```ts
+/**
+ * 클래스
+ */
+// 상속 (유전자를 내려받고 확장)
+class Parent {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+class Child extends Parent {
+  age: number;
+  constructor(name: string, age: number) {
+    super(name);
+    this.age = age;
+  }
+}
+
+class Child1 extends Parent {
+  // 아래 코드가 자동으로 들어감 (디폴트 생성자)
+  // constructor(name: string) {
+  //   super(name);
+  // }
+}
+
+let father = new Parent("홍판서");
+father.name;
+
+let son = new Child("홍길동", 10);
+son.name;
+```
+
+```ts
+/**
+ * 클래스
+ *
+ * 접근 제한자 (Visibility Keyword)
+ * 1. public : 코드 어디서나 접근 가능
+ * 2. protected : 현재 클래스와 자식 클래스에서 접근 가능
+ * 3. private : 현재 클래스에서만 접근 가능
+ */
+class Mom {
+  public publicProperty: string = "public";
+  protected protectedProperty: string = "protected";
+  private privateProperty: string = "private";
+  // js에서 사용하는 private
+  #jsPrivate: string = "jsPrivate";
+  test() {
+    this.publicProperty;
+    this.protectedProperty;
+    this.privateProperty;
+  }
+}
+class Son extends Mom {
+  gogo() {
+    this.publicProperty; // 가능 (public 접근 가능)
+    this.protectedProperty; // 가능 (상속이므로 protected 접근 가능)
+    // this.privateProperty; // 불가능 (상속이더라도 private라서 접근 불가)
+    // this.#jsPrivate; // 불가능 (상속이더라도 private라서 접근 불가)
+  }
+}
+
+const instance = new Son();
+instance.publicProperty;
+// instance.protectedProperty; // protected라서 외부에서 접근불가
+// instance.privateProperty; // private라서 외부에서 접근불가
+// instance.#jsPrivate; // #이라서 외부에서 접근불가
+```
+
+# Generic
+
+- 타입을 마치 변수처럼 전달하기
+
+```ts
+/**
+ * 제네릭
+ * 함수에서 제네릭 사용하기
+ */
+function whatValue(value: any) {
+  return value;
+}
+// const v: any
+const v = whatValue("안녕");
+// v.toFixed(3); // 런타임에 오류 발생
+
+// 변수타입을 실행중에 전달할 수 없을까?
+// Generic을 사용해보자
+// T는 아무 의미가 없음
+function genericWhatValue<T>(value: T): T {
+  return value;
+}
+// const a: string
+const a = genericWhatValue<string>("안녕");
+// const b: number
+const b = genericWhatValue<number>(1);
+
+// 여러 개의 변수 타입을 전달가능
+function genericMulti<T, U>(a: T, b: U): { a: T; b: U } {
+  return { a, b };
+}
+// const d: { a: string; b: number }
+const d = genericMulti<string, number>("아이유", 30);
+
+// 클래스에서 제네릭 사용하기
+class Idol {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+class Car {
+  brand: string;
+  codeName: string;
+  constructor(brand: string, codeName: string) {
+    this.brand = brand;
+    this.codeName = codeName;
+  }
+}
+// 인스턴스를 자동으로 만들어주는 함수
+// 형태만 보아둡시다. 앞으로 일단 복사해서 씁시다
+function makeInstance<T extends { new (...args: any[]): {} }>(
+  constructor: T,
+  ...args: any[]
+) {
+  return new constructor(...args);
+}
+// const go = new Idol("아이유", 30);
+// const go2 = new Car("BMW", "M80");
+
+const iu = makeInstance(Idol, "아이유", 30);
+const bmw = makeInstance(Car, "BMW", "M80");
+```
+
+```ts
+/**
+ * 제네릭
+ * 인터페이스에서 제네릭 사용하기
+ */
+interface DataCache<T> {
+  data: T[];
+  lastUpdate: Date;
+}
+const data: DataCache<string> = {
+  data: ["a", "b", "c"],
+  lastUpdate: new Date(),
+};
+const data2: DataCache<number> = {
+  data: [1, 2, 3],
+  lastUpdate: new Date(),
+};
+
+// 기본 타입을 지정할 수도 있다
+interface DefineType<T = string> {
+  data: T;
+}
+interface DefineType2<T = {}> {
+  data: T;
+}
+// 아래는 기본타입 적용됨
+const a: DefineType = {
+  data: "안녕",
+};
+const b: DefineType<number> = {
+  data: 100,
+};
+```
+
+```ts
+/**
+ * 제네릭
+ * 타입에서 제네릭 사용하기
+ */
+type GenericSample<T> = T;
+// const a: string
+const a: GenericSample<string> = "안녕";
+// const b: number
+const b: GenericSample<number> = 100;
+// const c: boolean
+const c: GenericSample<boolean> = true;
+
+interface DoneState<T> {
+  data: T[];
+}
+interface LoadingState {
+  data: Date;
+}
+interface ErrorState {
+  data: Error;
+}
+
+type State<T = string> = DoneState<T> | LoadingState | ErrorState;
+
+let state: State = {
+  data: ["a", "b", "c"],
+};
+
+state = {
+  data: new Date(),
+};
+
+state = {
+  data: new Error("로딩 실패"),
+};
+
+interface ITodo {
+  id: number;
+  title: string;
+}
+let todoState: State<ITodo> = {
+  data: [
+    { id: 1, title: "안녕" },
+    { id: 2, title: "안녕2" },
+    // { id: 3 } // 오류
+  ],
+};
+```
+
+```ts
+/**
+ * 제네릭
+ * 클래스 정의에서 제네릭 사용하기
+ */
+class Pagination<T, U> {
+  // 초기화 함
+  data: T[] = [];
+  message?: U;
+  lastDate?: T;
+}
+let p = new Pagination<number, string>();
+let p2 = new Pagination<string, string>();
+class Pagination2<T, U, S> {
+  // 초기화 함
+  data: T[] = [];
+  message?: U;
+  lastDate?: S;
+  // 생성자 함수에 제네릭 적용하기
+  constructor(data: T[], message?: U, lastDate?: S) {
+    this.data = data;
+    this.message = message;
+    this.lastDate = lastDate;
+  }
+}
+let p3 = new Pagination2<string, string, Date>(
+  ["a", "b", "c"],
+  "안녕",
+  new Date()
+);
+```
+
+```ts
+/**
+ * 제네릭
+ * 클래스 상속에서 제네릭 사용하기
+ */
+class Base<T> {
+  // 초기값 있는 경우
+  data: T[] = [];
+}
+
+class StringBase extends Base<string> {}
+const a = new StringBase();
+// (property) Base<string>.data: string[]
+a.data;
+
+// 자식 클래스가 타입을 결정 (자식 클래스가 부모 클래스에게 타입변수를 전달)
+class NumberBase<U> extends Base<U> {}
+const b = new NumberBase<number>();
+// (property) Base<number>.data: number[]
+b.data;
+
+// interface 상속
+interface BasicI {
+  name: string;
+}
+class Idol<T extends BasicI> {
+  // 초기값이 없으므로 constructor에서 세팅
+  information: T;
+  constructor(information: T) {
+    this.information = information;
+  }
+}
+// let iu: Idol<{ name: string; age: number; }>
+let iu = new Idol({ name: "아이유", age: 30 });
+
+// keyof를 같이 사용하기
+const obj = { a: 1, b: 2, c: 3 };
+function objectParser<T, U extends keyof T>(v1: T, v2: U) {
+  return v1[v2];
+}
+
+const e = objectParser(obj, "a");
+
+// 3항 연산자 예제
+class Idol2 {
+  // 초기화가 필요하므로 constructor에서 할당
+  // 하지만 옵션으로 설정하였다
+  type?: string; // string | undefined
+}
+class MaleIdol extends Idol2 {
+  type = "남자 아이돌";
+}
+class FemaleIdol extends Idol2 {
+  type = "여자 아이돌";
+}
+type SpecialIdol<T extends Idol2> = T extends MaleIdol ? MaleIdol : FemaleIdol;
+const idol1: SpecialIdol<MaleIdol> = new MaleIdol();
+idol1.type; // 남자 아이돌
+const idol2: SpecialIdol<FemaleIdol> = new FemaleIdol();
+idol2.type; // 여자 아이돌
+```
+
+```ts
+/**
+ * 제네릭
+ * 클래스 메소드에서 제네릭 사용하기
+ */
+class idol<T> {
+  id: T;
+  name: string;
+  constructor(id: T, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+  // 메소드에 제네릭 적용하기
+  sayHello<M>(memo: M) {
+    return memo;
+  }
+}
+const iu = new idol<string>("iu1004", "아이유");
+// iu.sayHello<string>("안녕");
+iu.sayHello("안녕");
+// iu.sayHello<number>(1990);
+iu.sayHello(1990);
+
+// 아래는 한번 체크합시다
+class Idol2<T> {
+  sayHello<T>(memo: T) {
+    return memo;
+  }
+}
+// 인스턴스 생성 시 정의한 타입이 메소드의 타입에 영향을 주지 않음
+const iu2 = new Idol2<string>();
+iu2.sayHello<number>(1990);
+iu2.sayHello(1990);
+```
+
+```ts
+/**
+ * 제네릭
+ * 클래스 Implementation에서 제네릭 사용하기
+ */
+// 약속을 지켜라
+interface Singer<T, U> {
+  name: T;
+  sing(year: U): void;
+}
+class Idol implements Singer<string, number> {
+  // 초기값 필요
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+  // 메소드
+  sing(year: number): void {
+    console.log(year);
+  }
+}
+
+const iu = new Idol("아이유");
+iu.sing(1990);
+
+class Idol2<T, U> implements Singer<T, U> {
+  // 초기값 필요
+  name: T;
+  constructor(name: T) {
+    this.name = name;
+  }
+  // 메소드
+  sing(year: U): void {
+    console.log(year);
+  }
+}
+const iu2 = new Idol2<string, number>("아이유");
+```
+
+```ts
+/**
+ * 제네릭
+ * Promise에서 제네릭 사용하기
+ */
+const afterTwoTime = function (): Promise<string> {
+  return new Promise((resolve) => {
+    resolve("hi");
+  });
+};
+```
+
+# Utility 타입
+
+```ts
+/**
+ * Utility 타입
+ */
+
+// Partial Type (가장 많이 사용하는 Utility 타입)
+// 모든 속성에 옵셔널 체이닝 `?`을 붙인다
+// 객체의 일부분만 수정이 가능하도록
+interface Idol {
+  name: string;
+  age: number;
+  groupName: string;
+}
+const suji: Idol = {
+  name: "수지",
+  age: 32,
+  groupName: "black pink",
+};
+
+type IdolPartial = Partial<Idol>;
+function updateIdol(origin: Idol, update: IdolPartial): Idol {
+  return { ...origin, ...update };
+}
+const suji2 = updateIdol(suji, { age: 24 });
+
+// Required (모두 필수 속성으로 변경)
+interface Cat {
+  name: string;
+  age?: number;
+  breed?: string;
+}
+type CatRequire = Required<Cat>;
+
+// Readonly (모두 읽기 전용 속성으로 변경)
+type CatReadonly = Readonly<Cat>;
+
+// Pick (특정 속성만 선택해서 사용)
+type CatPick = Pick<Cat, "age" | "breed">;
+
+// Omit (특정 속성만 제외해서 선택)
+type CatOmit = Omit<Cat, "name">;
+
+// Exclude (특정 타입을 제외하고 사용)
+type NoString = Exclude<string | boolean | number, string>;
+type CatExclude = {
+  [key in Exclude<keyof Cat, "name">]: Cat[key];
+};
+
+// Extract (특정 타입을 추출해서 사용)
+type NoString2 = Extract<string | boolean | number, string>;
+type CatExtract = {
+  [key in Extract<keyof Cat, "age" | "breed">]: Cat[key];
+};
+
+// Parameters (매개 변수 타입을 사용)
+function fun(x: number, y: number, z: boolean) {}
+// type TParams = [x: number, y: number, z: boolean]
+type TParams = Parameters<typeof fun>;
+// type TParamsVoid = [a: number]
+type TParamsVoid = Parameters<(a: number) => void>;
+
+// ConstructorParameters (생성자 함수의 타입)
+class Idol {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+// type TCS = [name: string, age: number]
+type TCS = ConstructorParameters<typeof Idol>;
+
+// ReturnType (함수의 리턴타입)
+type sFn = (a: number) => number;
+// type RT = number
+type RT = ReturnType<sFn>;
+// type RT2 = void
+type RT2 = ReturnType<() => void>;
+
+// Template Literal Type
+type IU = "Iue";
+// type UIU = "IUE" => 모두 대문자
+type UIU = Uppercase<IU>;
+// type SIU = "iue" => 모두 소문자
+type SIU = Lowercase<IU>;
+// type CIU = "Iue" => 첫글자 대문자
+type CIU = Capitalize<IU>;
+// type UCIU = "iue" => 첫글자 소문자
+type UCIU = Uncapitalize<IU>;
+```

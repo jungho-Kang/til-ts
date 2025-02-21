@@ -1571,7 +1571,7 @@ type UserApiState8 = {
 };
 ```
 
-# class
+# Class
 
 - 우리가 정의하기보다는 라이브러리들이 정의되어진 경우가 많다
 
@@ -2193,6 +2193,7 @@ const suji: Idol = {
   groupName: "black pink",
 };
 
+// Partial (모든 속성을 옵션 `?`으로 변경)
 type IdolPartial = Partial<Idol>;
 function updateIdol(origin: Idol, update: IdolPartial): Idol {
   return { ...origin, ...update };

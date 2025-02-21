@@ -16,6 +16,7 @@ const suji: Idol = {
   groupName: "black pink",
 };
 
+// Partial (모든 속성을 옵션 `?`으로 변경)
 type IdolPartial = Partial<Idol>;
 function updateIdol(origin: Idol, update: IdolPartial): Idol {
   return { ...origin, ...update };
